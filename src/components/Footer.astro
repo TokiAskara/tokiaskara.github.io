@@ -3,5 +3,41 @@ const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} 人间过客 · 用 Astro 构建，托管于 GitHub Pages
+	<p>&copy; {today.getFullYear()} 人间过客 · 记录、整理，以及一些想讲给你听的故事</p>
+	<p class="meta">
+		<a href="https://github.com/TokiAskara/tokiaskara.github.io" target="_blank">GitHub</a>
+		<span>·</span>
+		<a href="/rss.xml">RSS</a>
+		<span>·</span>
+		<span>用 Astro 构建</span>
+	</p>
 </footer>
+
+<style>
+	footer {
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 2.5em 1.2em 3em;
+		border-top: 1px solid var(--line-strong);
+		text-align: center;
+	}
+	footer p {
+		margin: 0 0 0.6em;
+		color: var(--stone);
+		font-size: 0.92rem;
+	}
+	footer .meta {
+		display: flex;
+		justify-content: center;
+		gap: 0.6em;
+	}
+	footer a {
+		color: var(--olive);
+		text-decoration: none;
+	}
+	footer a:hover {
+		color: var(--terra);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+</style>

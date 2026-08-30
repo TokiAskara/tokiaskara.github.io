@@ -22,31 +22,42 @@ const latest = posts.slice(0, 3);
 		<main>
 			<section class="hero">
 				<h1>人间过客的小站</h1>
-				<p>
+				<p class="lede">
 					记录、整理，以及一些想讲给你听的故事。
-					写 <a href="/blog/">笔记</a>，也做些 <a href="/games/">能玩的小东西</a>。
+				</p>
+				<p class="sub">
+					写<a href="/blog/">笔记</a>，也做些<a href="/games/">能玩的小东西</a>。
 				</p>
 			</section>
 
-			<section>
+			<section class="block">
 				<h2>最新文章</h2>
 				<ul class="post-list">
 					{latest.map((post) => (
 						<li>
-							<a href={`/blog/${post.id}/`}>{post.data.title}</a>
-							<FormattedDate date={post.data.pubDate} />
+							<a href={`/blog/${post.id}/`}>
+								<span class="post-title">{post.data.title}</span>
+								<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+							</a>
 						</li>
 					))}
 				</ul>
-				<p><a href="/blog/">全部文章 →</a></p>
+				<p class="more"><a href="/blog/">全部文章 →</a></p>
 			</section>
 
-			<section>
+			<section class="block">
 				<h2>游戏</h2>
-				<p>
-					网页文字冒险《<a href="/games/xueye-tideng/">雪夜提灯</a>》已上线，
-					很短，五个结局。更多<a href="/games/">在这里</a>。
-				</p>
+				<div class="game-card">
+					<div class="game-info">
+						<h3><a href="/games/xueye-tideng/">雪夜提灯</a></h3>
+						<p class="game-meta">文字冒险 · 五个结局 · 约 5 分钟</p>
+						<p class="game-desc">
+							除夕夜的雪，一条回乡的山道，一盏随时会被风吹灭的灯笼。
+						</p>
+					</div>
+					<a class="game-cta" href="/games/xueye-tideng/">进入</a>
+				</div>
+				<p class="more"><a href="/games/">全部游戏 →</a></p>
 			</section>
 		</main>
 		<Footer />
@@ -55,21 +66,122 @@ const latest = posts.slice(0, 3);
 
 <style>
 	.hero {
-		margin-bottom: 2.5rem;
+		padding: 3.5em 0 2.5em;
 	}
 	.hero h1 {
-		font-size: 2rem;
-		margin-bottom: 0.5rem;
+		font-size: 2.9rem;
+		letter-spacing: -0.015em;
+		margin: 0 0 0.5em;
+	}
+	.lede {
+		font-size: 1.2rem;
+		color: var(--olive);
+		margin: 0 0 0.4em;
+	}
+	.sub {
+		color: var(--stone);
+		margin: 0;
+		font-size: 0.95rem;
+	}
+	.block {
+		margin: 2.5em 0;
+	}
+	.block h2 {
+		font-size: 1.3rem;
+		padding-bottom: 0.4em;
+		border-bottom: 1px solid var(--line-strong);
 	}
 	.post-list {
 		list-style: none;
+		margin: 0;
 		padding: 0;
 	}
 	.post-list li {
+		border-bottom: 1px solid var(--line);
+	}
+	.post-list a {
 		display: flex;
 		justify-content: space-between;
-		gap: 1rem;
-		padding: 0.4rem 0;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+		align-items: baseline;
+		gap: 1em;
+		padding: 0.7em 0.2em;
+		text-decoration: none;
+	}
+	.post-title {
+		font-family: var(--font-serif);
+		font-size: 1.08rem;
+		color: var(--ink);
+		transition: color 0.2s ease;
+	}
+	.post-date {
+		font-size: 0.82rem;
+		color: var(--stone);
+		white-space: nowrap;
+	}
+	.post-list a:hover .post-title {
+		color: var(--terra);
+	}
+	.post-list a:hover {
+		text-decoration: none;
+	}
+	.more {
+		margin: 1em 0 0;
+		font-size: 0.92rem;
+	}
+	.game-card {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1.5em;
+		background: var(--ivory);
+		border: 1px solid var(--line-strong);
+		border-radius: 16px;
+		padding: 1.4em 1.6em;
+		box-shadow: var(--shadow-soft);
+	}
+	.game-card h3 {
+		margin: 0 0 0.2em;
+		font-size: 1.35rem;
+	}
+	.game-card h3 a {
+		color: var(--ink);
+	}
+	.game-card h3 a:hover {
+		color: var(--terra);
+		text-decoration: none;
+	}
+	.game-meta {
+		margin: 0 0 0.5em;
+		font-size: 0.82rem;
+		color: var(--stone);
+		letter-spacing: 0.03em;
+	}
+	.game-desc {
+		margin: 0;
+		color: var(--olive);
+		font-size: 0.95rem;
+	}
+	.game-cta {
+		flex-shrink: 0;
+		background: var(--terra);
+		color: var(--ivory);
+		padding: 0.55em 1.4em;
+		border-radius: 10px;
+		font-size: 0.95rem;
+		transition: background 0.2s ease;
+	}
+	.game-cta:hover {
+		background: var(--terra-deep);
+		color: var(--ivory);
+		text-decoration: none;
+	}
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 2.1rem;
+		}
+		.game-card {
+			flex-direction: column;
+			align-items: flex-start;
+		}
 	}
 </style>

@@ -11,7 +11,7 @@ type Props = CollectionEntry<'blog'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="zh-CN">
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
@@ -22,35 +22,49 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			.hero-image {
 				width: 100%;
+				max-width: 880px;
+				margin: 0 auto;
 			}
 			.hero-image img {
 				display: block;
 				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				border-radius: 16px;
+				border: 1px solid var(--line-strong);
 			}
 			.prose {
 				width: 720px;
 				max-width: calc(100% - 2em);
 				margin: auto;
 				padding: 1em;
-				color: rgb(var(--gray-dark));
+				color: var(--ink-soft);
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
+				margin: 2.5em 0 1.5em;
 				text-align: center;
-				line-height: 1;
 			}
 			.title h1 {
-				margin: 0 0 0.5em 0;
+				margin: 0 0 0.4em;
+				font-size: 2.5rem;
+				line-height: 1.2;
+				letter-spacing: -0.01em;
 			}
 			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9rem;
+				color: var(--stone);
+				letter-spacing: 0.04em;
 			}
 			.last-updated-on {
-				font-style: italic;
+				font-style: normal;
+				color: var(--stone);
+			}
+			.title hr {
+				display: none;
+			}
+			@media (max-width: 720px) {
+				.title h1 {
+					font-size: 1.8rem;
+				}
 			}
 		</style>
 	</head>
@@ -68,14 +82,13 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							<FormattedDate date={pubDate} />
 							{
 								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
+									<span class="last-updated-on">
+										{' '}(更新于 <FormattedDate date={updatedDate} />)
+									</span>
 								)
 							}
 						</div>
 						<h1>{title}</h1>
-						<hr />
 					</div>
 					<slot />
 				</div>

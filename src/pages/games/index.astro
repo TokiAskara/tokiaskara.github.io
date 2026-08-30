@@ -1,46 +1,103 @@
 ---
-import Layout from '../../layouts/BlogPost.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
 import { SITE_TITLE } from '../../consts';
 ---
 
-<Layout
-	title={`游戏 - ${SITE_TITLE}`}
-	description="自己做着玩的网页小游戏，以文字冒险为主。"
-	pubDate={new Date('2026-08-30')}
->
-	<p class="intro">
-		这里放自己做的小玩意。目前都是网页文字冒险，点开即玩，不用下载。
-		以后学到的技术多了，也许会有更复杂的。
-	</p>
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead
+			title={`游戏 - ${SITE_TITLE}`}
+			description="自己做着玩的网页小游戏，以文字冒险为主。"
+		/>
+		<style>
+			.games-head {
+				margin: 1.5em 0 2em;
+			}
+			.games-head h1 {
+				margin: 0 0 0.3em;
+				font-size: 2.2rem;
+			}
+			.games-head p {
+				margin: 0;
+				color: var(--stone);
+			}
+			.game-card {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 1.5em;
+				background: var(--ivory);
+				border: 1px solid var(--line-strong);
+				border-radius: 16px;
+				padding: 1.5em 1.7em;
+				box-shadow: var(--shadow-soft);
+			}
+			.game-card h2 {
+				margin: 0 0 0.25em;
+				font-size: 1.45rem;
+			}
+			.game-card h2 a {
+				color: var(--ink);
+			}
+			.game-card h2 a:hover {
+				color: var(--terra);
+				text-decoration: none;
+			}
+			.meta {
+				margin: 0 0 0.6em;
+				font-size: 0.82rem;
+				color: var(--stone);
+				letter-spacing: 0.03em;
+			}
+			.desc {
+				margin: 0;
+				color: var(--olive);
+				font-size: 0.96rem;
+			}
+			.cta {
+				flex-shrink: 0;
+				background: var(--terra);
+				color: var(--ivory);
+				padding: 0.55em 1.5em;
+				border-radius: 10px;
+				transition: background 0.2s ease;
+			}
+			.cta:hover {
+				background: var(--terra-deep);
+				color: var(--ivory);
+				text-decoration: none;
+			}
+			@media (max-width: 720px) {
+				.game-card {
+					flex-direction: column;
+					align-items: flex-start;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="games-head">
+				<h1>游戏</h1>
+				<p>自己做的小玩意。点开即玩，不用下载。</p>
+			</div>
 
-	<div class="game-card">
-		<h2><a href="/games/xueye-tideng/">《雪夜提灯》</a></h2>
-		<p class="meta">文字冒险 · 已完结 · 约 5 分钟 · 5 个结局</p>
-		<p>
-			除夕夜的雪，一条回乡的山道，一盏随时会被风吹灭的灯笼。
-			很短的一个物哀小故事，献给所有回不去和回得去的家。
-		</p>
-	</div>
-</Layout>
-
-<style>
-	.intro {
-		color: var(--theme-text-muted, #666);
-		margin-bottom: 2rem;
-	}
-	.game-card {
-		border: 1px solid rgba(0, 0, 0, 0.12);
-		border-radius: 8px;
-		padding: 1.2rem 1.5rem;
-		margin-bottom: 1.2rem;
-	}
-	.game-card h2 {
-		margin: 0 0 0.3rem;
-		font-size: 1.25rem;
-	}
-	.game-card .meta {
-		color: #888;
-		font-size: 0.85rem;
-		margin: 0 0 0.6rem;
-	}
-</style>
+			<div class="game-card">
+				<div class="game-info">
+					<h2><a href="/games/xueye-tideng/">雪夜提灯</a></h2>
+					<p class="meta">文字冒险 · 已完结 · 约 5 分钟 · 5 个结局</p>
+					<p class="desc">
+						除夕夜的雪，一条回乡的山道，一盏随时会被风吹灭的灯笼。
+						很短的一个物哀小故事，献给所有回不去和回得去的家。
+					</p>
+				</div>
+				<a class="cta" href="/games/xueye-tideng/">开始</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,81 +1,169 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+  人间过客的小站 · 全局样式
+  设计语言：Claude/Anthropic 设计系统（暖纸色 + 衬线标题 + 陶土点缀）
+  规范来源：parchment 画布、暖调中性色、耳语级边框、ring 阴影、书页式行距
+*/
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+	/* 表面与画布 */
+	--paper: #f5f4ed; /* 羊皮纸页面底色 */
+	--ivory: #faf9f5; /* 卡片表面 */
+	--sand: #e8e6dc; /* 暖沙：按钮/强调面 */
+
+	/* 文字（全部暖调，无冷灰） */
+	--ink: #141413; /* 近黑主文字 */
+	--ink-soft: #4d4c48; /* 深暖灰 */
+	--olive: #5e5d59; /* 次级文字 */
+	--stone: #87867f; /* 三级文字/元信息 */
+
+	/* 品牌色：陶土（唯一的饱和色） */
+	--terra: #c96442;
+	--terra-deep: #a8512f;
+
+	/* 边框与分隔 */
+	--line: #f0eee6;
+	--line-strong: #e8e6dc;
+
+	/* 深色段落用 */
+	--dark: #141413;
+	--dark-soft: #30302e;
+	--silver: #b0aea5;
+
+	/* 深度：ring 代替硬边框，阴影极轻 */
+	--ring: 0 0 0 1px #d1cfc5;
+	--shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.05);
+
+	/* 字体栈：衬线标题 + 无衬线正文，中文本地字体优先（不依赖外网） */
+	--font-serif: Georgia, 'Times New Roman', 'Source Han Serif SC', 'Noto Serif SC',
+		'Songti SC', SimSun, serif;
+	--font-sans: 'Segoe UI', system-ui, 'PingFang SC', 'Hiragino Sans GB',
+		'Microsoft YaHei', sans-serif;
+	--font-mono: ui-monospace, 'Cascadia Code', Consolas, 'Liberation Mono', monospace;
 }
+
 body {
-	font-family: var(--font-atkinson);
+	font-family: var(--font-sans);
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	background: var(--paper);
+	color: var(--ink);
+	font-size: 17px;
+	line-height: 1.8;
+	-webkit-font-smoothing: antialiased;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
 }
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
 }
+
+/* ---------- 标题：衬线，书卷气 ---------- */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
+	font-family: var(--font-serif);
+	font-weight: 500;
+	color: var(--ink);
+	line-height: 1.25;
+	margin: 0 0 0.6em;
 }
 h1 {
-	font-size: 3.052em;
+	font-size: 2.4rem;
+	letter-spacing: -0.01em;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 1.7rem;
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.35rem;
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.15rem;
 }
-h5 {
-	font-size: 1.25em;
-}
+
 strong,
 b {
-	font-weight: 700;
+	font-weight: 600;
 }
+
+/* ---------- 链接：陶土色 ---------- */
 a {
-	color: var(--accent);
+	color: var(--terra);
+	text-decoration: none;
+	transition: color 0.2s ease;
 }
 a:hover {
-	color: var(--accent);
+	color: var(--terra-deep);
+	text-decoration: underline;
+	text-underline-offset: 3px;
 }
+
 p {
 	margin-bottom: 1em;
 }
-.prose p {
-	margin-bottom: 2em;
+
+/* ---------- 正文排版（文章页） ---------- */
+.prose {
+	line-height: 1.85;
 }
+.prose p {
+	margin-bottom: 1.5em;
+}
+.prose h2 {
+	margin: 2.2em 0 0.8em;
+	padding-bottom: 0.3em;
+	border-bottom: 1px solid var(--line-strong);
+}
+.prose h3 {
+	margin: 1.8em 0 0.6em;
+}
+.prose ul,
+.prose ol {
+	padding-left: 1.4em;
+	margin-bottom: 1.5em;
+}
+.prose li {
+	margin-bottom: 0.4em;
+}
+
+blockquote {
+	margin: 1.5em 0;
+	border-left: 3px solid var(--terra);
+	padding: 0.2em 0 0.2em 1.2em;
+	color: var(--olive);
+}
+.prose blockquote {
+	font-size: 1em;
+}
+
+/* ---------- 代码 ---------- */
+code {
+	font-family: var(--font-mono);
+	font-size: 0.85em;
+	padding: 2px 6px;
+	background: rgba(20, 20, 19, 0.06);
+	border-radius: 4px;
+}
+pre {
+	padding: 1.2em 1.4em;
+	border-radius: 12px;
+	background: var(--dark);
+	color: #e8e2d6;
+	overflow-x: auto;
+}
+pre > code {
+	all: unset;
+}
+
+/* ---------- 其他元素 ---------- */
 textarea {
 	width: 100%;
 	font-size: 16px;
@@ -85,40 +173,40 @@ input {
 }
 table {
 	width: 100%;
+	border-collapse: collapse;
+}
+th,
+td {
+	border: 1px solid var(--line-strong);
+	padding: 0.5em 0.8em;
+	text-align: left;
+}
+th {
+	background: var(--ivory);
 }
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
-}
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
-}
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-}
-pre > code {
-	all: unset;
-}
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0;
-	font-size: 1.333em;
+	border-radius: 12px;
 }
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--line-strong);
 }
+
+::selection {
+	background: rgba(201, 100, 66, 0.22);
+}
+
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 16px;
 	}
 	main {
-		padding: 1em;
+		padding: 1.5em 1em;
+	}
+	h1 {
+		font-size: 1.9rem;
 	}
 }
 
@@ -130,12 +218,8 @@ hr {
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }

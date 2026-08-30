@@ -1,34 +1,83 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 ---
 
-<Layout
-	title="关于"
-	description="关于这个站点和站点背后的人。"
-	pubDate={new Date('2026-08-30')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		你好，我是<b>人间过客</b>。
-	</p>
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="关于" description="关于这个站点和站点背后的人。" />
+		<style>
+			.about-head {
+				margin: 1.5em 0 2em;
+			}
+			.about-head h1 {
+				margin: 0 0 0.3em;
+				font-size: 2.2rem;
+			}
+			.about p {
+				color: var(--ink-soft);
+			}
+			.facts {
+				list-style: none;
+				padding: 0;
+				margin: 2em 0;
+			}
+			.facts li {
+				display: flex;
+				gap: 1em;
+				padding: 0.7em 0.2em;
+				border-bottom: 1px solid var(--line);
+				font-size: 0.95rem;
+			}
+			.facts li:first-child {
+				border-top: 1px solid var(--line);
+			}
+			.facts .k {
+				flex-shrink: 0;
+				width: 5em;
+				color: var(--stone);
+			}
+			.facts .v {
+				color: var(--ink-soft);
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="about-head">
+				<h1>关于</h1>
+			</div>
+			<div class="about">
+				<p>
+					你好，我是<b>人间过客</b>。
+				</p>
+				<p>
+					技术美术方向的从业者与学习者，白天和模型、材质、渲染打交道，
+					业余时间做点独立游戏的小实验，也写一点偏物哀气质的小故事。
+				</p>
+				<p>
+					这个站点是我的自留地：整理学习资料、归档踩坑记录，
+					以及把一些编出来的故事做成能玩的网页小游戏。
+					更新随缘，但每一篇都是真的想清楚了才写的。
+				</p>
 
-	<p>
-		技术美术方向的从业者与学习者，白天和模型、材质、渲染打交道，
-		业余时间做点独立游戏的小实验，也写一点偏物哀气质的小故事。
-	</p>
+				<ul class="facts">
+					<li><span class="k">方向</span><span class="v">技术美术（TA）· 场景与环境</span></li>
+					<li><span class="k">工具</span><span class="v">Maya · ZBrush · Godot · 少许 C++ 与 GLSL</span></li>
+					<li><span class="k">在玩</span><span class="v">2D 游戏 Demo《TankExovader》</span></li>
+					<li><span class="k">在写</span><span class="v">短片练笔，偏爱物哀与凄美的调子</span></li>
+				</ul>
 
-	<p>
-		这个站点是我的自留地：整理学习资料、归档踩坑记录，
-		以及把一些编出来的故事做成能玩的网页小游戏。
-		更新随缘，但每一篇都是真的想清楚了才写的。
-	</p>
-
-	<p>
-		主要栏目：
-	</p>
-	<ul>
-		<li><a href="/blog/">博客</a>——笔记、整理与一些想法</li>
-		<li><a href="/games/">游戏</a>——自己做的网页小游戏</li>
-	</ul>
-</Layout>
+				<p>
+					主要栏目：<a href="/blog/">博客</a> ——
+					笔记、整理与想法；<a href="/games/">游戏</a> ——
+					自己做的网页小游戏。
+				</p>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
