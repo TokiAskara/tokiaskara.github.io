@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/BlogPost.astro';
+import { SITE_TITLE } from '../../consts';
+---
+
+<Layout
+	title={`游戏 - ${SITE_TITLE}`}
+	description="自己做着玩的网页小游戏，以文字冒险为主。"
+	pubDate={new Date('2026-08-30')}
+>
+	<p class="intro">
+		这里放自己做的小玩意。目前都是网页文字冒险，点开即玩，不用下载。
+		以后学到的技术多了，也许会有更复杂的。
+	</p>
+
+	<div class="game-card">
+		<h2><a href="/games/xueye-tideng/">《雪夜提灯》</a></h2>
+		<p class="meta">文字冒险 · 已完结 · 约 5 分钟 · 4 个结局</p>
+		<p>
+			除夕夜的雪，一条回乡的山道，一盏随时会被风吹灭的灯笼。
+			很短的一个物哀小故事，献给所有回不去和回得去的家。
+		</p>
+	</div>
+</Layout>
+
+<style>
+	.intro {
+		color: var(--theme-text-muted, #666);
+		margin-bottom: 2rem;
+	}
+	.game-card {
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		border-radius: 8px;
+		padding: 1.2rem 1.5rem;
+		margin-bottom: 1.2rem;
+	}
+	.game-card h2 {
+		margin: 0 0 0.3rem;
+		font-size: 1.25rem;
+	}
+	.game-card .meta {
+		color: #888;
+		font-size: 0.85rem;
+		margin: 0 0 0.6rem;
+	}
+</style>

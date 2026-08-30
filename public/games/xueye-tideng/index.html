@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>雪夜提灯 · 文字冒险</title>
+	<style>
+		:root {
+			--bg: #10141f;
+			--paper: #171c2b;
+			--ink: #d8dee9;
+			--dim: #8a93a6;
+			--flame: #e8a44c;
+			--line: rgba(232, 164, 76, 0.25);
+		}
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			min-height: 100vh;
+			background: var(--bg);
+			color: var(--ink);
+			font-family: 'Noto Serif SC', 'Source Han Serif SC', Georgia, serif;
+			display: flex;
+			justify-content: center;
+		}
+		main {
+			width: 100%;
+			max-width: 640px;
+			padding: 1.5rem 1.2rem 3rem;
+		}
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			border-bottom: 1px solid var(--line);
+			padding-bottom: 0.8rem;
+			margin-bottom: 1.5rem;
+		}
+		header h1 { font-size: 1.15rem; margin: 0; color: var(--flame); letter-spacing: 0.15em; }
+		#lamp { font-size: 0.85rem; color: var(--dim); }
+		#lamp.out { color: #55607a; }
+		.scene { animation: fadein 0.9s ease both; }
+		@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+		h2.node-title { font-size: 1.05rem; color: var(--flame); margin: 0 0 1rem; letter-spacing: 0.08em; }
+		p.text { line-height: 2; margin: 0 0 1.8rem; font-size: 1rem; }
+		.choices { list-style: none; padding: 0; margin: 0; }
+		.choices li { margin-bottom: 0.8rem; }
+		.choices button {
+			width: 100%;
+			text-align: left;
+			background: var(--paper);
+			color: var(--ink);
+			border: 1px solid var(--line);
+			border-radius: 6px;
+			padding: 0.75rem 1rem;
+			font-size: 0.95rem;
+			font-family: inherit;
+			cursor: pointer;
+			transition: border-color 0.25s, color 0.25s, transform 0.15s;
+		}
+		.choices button:hover { border-color: var(--flame); color: var(--flame); transform: translateX(3px); }
+		.ending-tag {
+			display: inline-block;
+			border: 1px solid var(--flame);
+			color: var(--flame);
+			border-radius: 4px;
+			font-size: 0.8rem;
+			padding: 0.15rem 0.6rem;
+			margin-bottom: 1rem;
+			letter-spacing: 0.2em;
+		}
+		.restart { margin-top: 2rem; }
+		.restart button {
+			background: none;
+			border: none;
+			color: var(--dim);
+			font-family: inherit;
+			font-size: 0.9rem;
+			cursor: pointer;
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+		.restart button:hover { color: var(--flame); }
+		.credit { margin-top: 3rem; color: #55607a; font-size: 0.8rem; text-align: center; }
+	</style>
+</head>
+<body>
+	<main>
+		<header>
+			<h1>雪夜提灯</h1>
+			<div id="lamp">灯火 · 明</div>
+		</header>
+		<div id="scene" class="scene"></div>
+		<div class="credit">一个练习用的小故事 · 四个结局 · 每个结局都是归途的一种</div>
+	</main>
+
+	<script>
+		// ---------- 故事节点 ----------
+		// lamp: 顶部状态栏显示的灯火状态；e: 结局标记
+		const nodes = {
+			start: {
+				lamp: '明',
+				title: '一 · 归人',
+				text: '除夕。雪从午后一直下到现在，把山道埋去了半尺深。你提着灯笼往村里走——镇上买年货的归程，比往年都晚。祖母在世时常说：雪夜的灯笼，护的是活人的火，也是别的什么人的盼头。',
+				choices: [ { t: '把灯护在怀里，继续走', to: 'road' } ],
+			},
+			road: {
+				lamp: '明',
+				title: '二 · 旧痕',
+				text: '风从山坳里灌下来，灯笼在你手里晃出一片不安分的橙。雪地上除了你的脚印，还有一道更旧的痕迹，已经被新雪填得只剩浅浅一线，向着前方岔口去了。',
+				choices: [
+					{ t: '跟着那道痕迹，走向岔口', to: 'cross' },
+					{ t: '加快脚步，只管赶路', to: 'road2' },
+				],
+			},
+			road2: {
+				lamp: '弱',
+				title: '三 · 远处的光',
+				text: '你把灯笼护在怀里，一步快过一步。可风越来越大，火苗被压得几乎伏了下去。就在这时，远处极淡的地方，浮起了一点暖色的光。',
+				choices: [
+					{ t: '朝那点光走过去', to: 'lights' },
+					{ t: '不理会，拐上回村的山道', to: 'path' },
+				],
+			},
+			cross: {
+				lamp: '明',
+				title: '三 · 岔口',
+				text: '岔口立着一根旧木桩，桩上钉的指路牌早就朽了。往左，是回村的山道；往右，通向半山废弃的茶棚——那道旧痕迹，正是往右去的。',
+				choices: [
+					{ t: '回村要紧，走山道', to: 'path' },
+					{ t: '这个时辰，有活物在那边受冻……去看看', to: 'teahouse' },
+				],
+			},
+			path: {
+				lamp: '弱',
+				title: '四 · 身后的脚步',
+				text: '山道依着崖，雪把边缘抹平了。你提着灯，一步一步探着走。风声里，你好像听见身后有另一串脚步——不紧不慢，与你保持着三步的距离。回头，只有雪。',
+				choices: [
+					{ t: '停下来，回头看清楚', to: 'turn' },
+					{ t: '什么都不问，继续走', to: 'arrive' },
+				],
+			},
+			turn: {
+				lamp: '弱',
+				title: '五 · 回头',
+				text: '你转过身。雪片斜斜地穿过灯光，光的边缘之外，黑暗温和地立着，什么也没有。可你的灯笼，忽然变得很轻。你这才想起祖母话里的后半句——雪夜回头的人，会替别人提一段路。',
+				choices: [
+					{ t: '把灯举高些，照亮来路', to: 'givelight' },
+					{ t: '转回去，快步走完剩下的路', to: 'arrive' },
+				],
+			},
+			givelight: {
+				lamp: '弱',
+				title: '六 · 交接',
+				text: '你把灯笼举过头顶，让光落在身后的雪上。雪光里浮现出一只手——很旧、很瘦，从袖口看，是一位老人的手。它轻轻覆上你的手背，接过灯笼，向你微微颔首。像是在说：这一路的黑，它替你走。',
+				choices: [
+					{ t: '留在原地，目送那点光', to: 'wait' },
+					{ t: '趁着还有雪光，走完剩下的路', to: 'arrive2' },
+				],
+			},
+			wait: {
+				lamp: '熄',
+				title: '七 · 目送',
+				text: '那点橙色的光在雪里越来越小，像一粒被风捧着的火种。你没有走。你听见极远的地方，传来一声很轻的、旧木门的吱呀。然后，光灭了。你站在原地，直到天色泛青。摊开手——掌心里，静静躺着一小截燃剩的红烛，还温着。',
+				choices: [ { t: '提着这截红烛，下山', to: 'e_deng' } ],
+			},
+			lights: {
+				lamp: '明',
+				title: '四 · 茶棚',
+				text: '那点光是茶棚的窗纸透出来的，暖得不像话。门虚掩着，里面传来拨炭火的轻响。你记得很清楚——这棚子，荒废十年了。',
+				choices: [
+					{ t: '推门进去', to: 'oldman' },
+					{ t: '在门外唤一声', to: 'callout' },
+				],
+			},
+			teahouse: {
+				lamp: '明',
+				title: '四 · 茶棚',
+				text: '茶棚的窗纸透出昏黄的暖。近了才听见，里面有炭火细细的哔剥声，还有谁在低低地哼着一支旧年谣。你记得很清楚，这棚子荒了十年。',
+				choices: [
+					{ t: '推门进去', to: 'oldman' },
+					{ t: '在门外唤一声', to: 'callout' },
+				],
+			},
+			callout: {
+				lamp: '明',
+				title: '五 · 应门',
+				text: '你唤了一声。歌停了。半晌，一个苍老的声音隔着门说：「客人，进来避避吧，外面冷。」门闩自己轻轻响了——像是里面的人，早已替你留了门。',
+				choices: [
+					{ t: '进去', to: 'oldman' },
+					{ t: '退开几步，说不必了', to: 'refuse' },
+				],
+			},
+			refuse: {
+				lamp: '弱',
+				title: '六 · 隔门',
+				text: '你退回雪里。身后的光晃了晃，门缓缓合上，把暖色收得干干净净。你忽然觉得那扇门后并非不欢迎你——只是等的人，另有其人。你提着灯走进风里，一路无言。',
+				choices: [ { t: '赶回村', to: 'e_xue' } ],
+			},
+			oldman: {
+				lamp: '明',
+				title: '六 · 守棚人',
+				text: '棚里，一位老人守着一小盆炭火，火光照着一张皱纹安静的脸。他替你拍了拍对面的座位：「雪夜赶路的人，就该喝口热的。」茶很淡，暖意却一直落到指尖。老人望着火，说起山那头的家，说起「今年灶上也该留一副碗筷了」。',
+				choices: [
+					{ t: '问他，为什么一个人在这里', to: 'ask' },
+					{ t: '把自己的灯笼芯，分他一半', to: 'share' },
+					{ t: '听着就好，暖够了便告别', to: 'leave' },
+				],
+			},
+			ask: {
+				lamp: '明',
+				title: '七 · 等灯的人',
+				text: '老人笑而不答，往火里添了块炭：「走夜路的人，总要有个人留灯。」他抬眼看你，目光穿过你，落在大雪深处的某一处：「我等的人，快到了。」炭火哔剥响了一声，暗了半分。',
+				choices: [
+					{ t: '把自己的灯笼借给他', to: 'share' },
+					{ t: '起身告辞', to: 'leave' },
+				],
+			},
+			share: {
+				lamp: '明',
+				title: '八 · 还灯',
+				text: '你把灯笼递了过去。老人接得很郑重，像接一件传了三代的东西。他说：「好孩子。灯还你的时候，替我看看今年的雪，是不是和那年一样大。」火光一跳。棚里只剩你一人，炭盆将熄，门外的雪不知何时停了。桌上，你的灯笼还在，火苗安安稳稳——只是比来时，旧了一些。',
+				choices: [ { t: '提着灯，回村', to: 'e_kezen' } ],
+			},
+			leave: {
+				lamp: '明',
+				title: '七 · 一把炒米',
+				text: '你谢过老人，起身告辞。他送你到门口，往你手里塞了一小把炒米：「路上吃。」走出很远再回头，茶棚的窗纸依旧透着暖光。你望着那扇门，忽然想不起，自己有没有问过老人的名字。雪没有停。你也没有再回去看。',
+				choices: [ { t: '下山回村', to: 'e_gui' } ],
+			},
+			arrive: {
+				lamp: '弱',
+				title: '七 · 石碑',
+				text: '灯火撑到了最后一段坡。村口的老槐树从雪幕里显出来时，你听见了心跳。身后的脚步声，在跨过村口石碑的那一刻，轻轻停住了。你没有回头。有些路，只能陪到这里。',
+				choices: [ { t: '推门回家', to: 'e_gui2' } ],
+			},
+			arrive2: {
+				lamp: '熄',
+				title: '七 · 无灯',
+				text: '你借着雪光走完了山道。村口的石碑上落满雪，碑面朝路的那一侧，不知被谁擦出了一小块干净的地方——像常有谁靠在那里歇脚。',
+				choices: [ { t: '回家', to: 'e_gui2' } ],
+			},
+
+			// ---------- 结局 ----------
+			e_gui: {
+				lamp: '明', e: '雪与灯',
+				title: '结局 · 雪与灯',
+				text: '天亮时你下了山。村里爆竹声此起彼伏，家家门上贴了新红。后来你把那把炒米分给了村里的孩子，把没问出口的问题留在了雪里。每年除夕落雪，你都会朝半山的方向望一眼——茶棚早就塌了，可那一夜窗纸的暖光，一直亮在你的记忆里。',
+				choices: [],
+			},
+			e_xue: {
+				lamp: '弱', e: '不问',
+				title: '结局 · 不问',
+				text: '你回到村里时，灯还剩最后一点火。那一夜你睡得很沉，没有梦见任何人。只是后来每年除夕，你都会在窗台上多摆一副碗筷。祖母问你留给谁，你说：不问。有些事问了，就要还愿的。',
+				choices: [],
+			},
+			e_deng: {
+				lamp: '熄', e: '提灯的人',
+				title: '结局 · 提灯的人',
+				text: '后来村里人说，那夜半山的茶棚亮了一宿的灯，天亮才熄。你掌心那截红烛，没舍得点。许多年后你给自己的孩子讲雪夜提灯的规矩，讲到「替别人提一段路」，孩子问：那灯后来还回来吗？你说：还了。以另一种方式。',
+				choices: [],
+			},
+			e_kezen: {
+				lamp: '明', e: '客人',
+				title: '结局 · 客人',
+				text: '你提着那盏变旧的灯回到村里，天刚蒙蒙亮。母亲开门，看见你，愣了很久，才说：「回来就好。」灶上温着两副碗筷——一副是你的，另一副，谁也没提。许多年后你才听说，十年前的除夕，有位老人在茶棚里等他未归的儿子，等着等着，就没再出山。那夜你递出去的，是他等了十年的、别人的灯。',
+				choices: [],
+			},
+			e_gui2: {
+				lamp: '弱', e: '归家',
+				title: '结局 · 归家',
+				text: '门开的一瞬，热气裹着饭菜香扑了你满怀。母亲絮叨着接过行囊，父亲往你手里塞了双干袜子，谁也没问路上怕不怕。你坐在灶边烤手，忽然想起那三步之外的脚步声——它送你到家，停在石碑外面。年夜饭桌上，祖母往门外摆了一小盏灯。你说：让它也来吃一口热乎的吧。',
+				choices: [],
+			},
+		};
+
+		// ---------- 引擎 ----------
+		const sceneEl = document.getElementById('scene');
+		const lampEl = document.getElementById('lamp');
+		const ENDINGS_SEEN_KEY = 'xueye-endings-seen';
+
+		function render(key) {
+			const n = nodes[key];
+			lampEl.textContent = '灯火 · ' + n.lamp;
+			lampEl.classList.toggle('out', n.lamp === '熄');
+
+			// 结局：记录已收集，显示重开按钮
+			if (n.e) {
+				const seen = JSON.parse(localStorage.getItem(ENDINGS_SEEN_KEY) || '[]');
+				if (!seen.includes(n.e)) { seen.push(n.e); localStorage.setItem(ENDINGS_SEEN_KEY, JSON.stringify(seen)); }
+				const total = Object.values(nodes).filter(x => x.e).length;
+				setTimeout(() => {
+					lampEl.textContent = `灯火 · ${n.lamp}｜结局已寻得 ${seen.length}/${total}`;
+				}, 1200);
+			}
+
+			sceneEl.classList.remove('scene');
+			void sceneEl.offsetWidth; // 重置动画
+			sceneEl.classList.add('scene');
+
+			let html = '';
+			if (n.e) html += `<span class="ending-tag">结 局 · ${n.e}</span>`;
+			html += `<h2 class="node-title">${n.title}</h2><p class="text">${n.text}</p>`;
+			if (n.choices.length) {
+				html += '<ul class="choices">' + n.choices
+					.map((c, i) => `<li><button data-i="${i}">${c.t}</button></li>`).join('') + '</ul>';
+			} else {
+				html += `<div class="restart"><button id="restart">在雪夜里，重新提一盏灯 ↺</button></div>`;
+			}
+			sceneEl.innerHTML = html;
+
+			sceneEl.querySelectorAll('.choices button').forEach(btn => {
+				btn.addEventListener('click', () => render(n.choices[btn.dataset.i].to));
+			});
+			const rs = document.getElementById('restart');
+			if (rs) rs.addEventListener('click', () => render('start'));
+		}
+
+		render('start');
+	</script>
+</body>
+</html>
