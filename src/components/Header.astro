@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import { CATEGORIES } from '../content.config';
 ---
 
 <header>
@@ -8,7 +9,15 @@ import HeaderLink from './HeaderLink.astro';
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="internal-links">
 			<HeaderLink href="/">首页</HeaderLink>
-			<HeaderLink href="/blog/">博客</HeaderLink>
+			<div class="dropdown">
+				<HeaderLink href="/blog/">博客 <span class="caret">▾</span></HeaderLink>
+				<div class="menu">
+					{CATEGORIES.map((cat) => (
+						<a href={`/blog/${cat.subpath}/`}>{cat.name}</a>
+					))}
+					<a href="/blog/"><span class="all">全部文章</span></a>
+				</div>
+			</div>
 			<HeaderLink href="/games/">游戏</HeaderLink>
 			<HeaderLink href="/about/">关于</HeaderLink>
 		</div>
@@ -51,6 +60,7 @@ import HeaderLink from './HeaderLink.astro';
 	.internal-links {
 		display: flex;
 		gap: 0.4em;
+		align-items: center;
 	}
 	nav a {
 		padding: 0.3em 0.6em;
@@ -67,6 +77,62 @@ import HeaderLink from './HeaderLink.astro';
 	nav a.active {
 		color: var(--terra);
 		background: rgba(201, 100, 66, 0.1);
+	}
+
+	/* ---------- 博客下拉子菜单 ---------- */
+	.dropdown {
+		position: relative;
+	}
+	.caret {
+		font-size: 0.7em;
+		opacity: 0.7;
+	}
+	.menu {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 50%;
+		transform: translateX(-50%) translateY(4px);
+		min-width: 8.5em;
+		background: var(--ivory);
+		border: 1px solid var(--line-strong);
+		border-radius: 12px;
+		box-shadow: var(--shadow-soft);
+		padding: 0.4em;
+		display: flex;
+		flex-direction: column;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+	}
+	.dropdown:hover .menu,
+	.dropdown:focus-within .menu {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(-50%) translateY(0);
+	}
+	.menu a {
+		display: block;
+		padding: 0.45em 0.8em;
+		border-radius: 8px;
+		color: var(--ink-soft);
+		white-space: nowrap;
+	}
+	.menu a:hover {
+		background: rgba(201, 100, 66, 0.08);
+		color: var(--terra);
+	}
+	.menu .all {
+		color: var(--stone);
+		font-size: 0.88em;
+	}
+	/* 悬停桥：菜单与触发器之间的小间隙也能平稳移入 */
+	.dropdown::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 100%;
+		height: 8px;
 	}
 	@media (max-width: 720px) {
 		nav {

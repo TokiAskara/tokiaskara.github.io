@@ -2,6 +2,7 @@
 title: '反转的前置伏笔'
 description: '反转要成立，必须提前埋下足量但不过度的伏笔——藏在行为里，而不是台词里。'
 pubDate: '2026-08-30'
+category: 'mechanisms'
 ---
 
 > 机制卡 · 叙事结构

@@ -1,14 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../../content.config';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getCollection('blog');
+const countOf = (key: string) => posts.filter((p) => p.data.category === key).length;
 ---
 
 <!doctype html>
@@ -16,11 +15,8 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={`博客 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 680px;
-			}
 			.page-head {
-				margin: 1.5em 0 2.5em;
+				margin: 1.5em 0 2em;
 			}
 			.page-head h1 {
 				margin: 0 0 0.3em;
@@ -30,67 +26,76 @@ const posts = (await getCollection('blog')).sort(
 				color: var(--stone);
 				font-size: 0.95rem;
 			}
-			ul {
-				list-style: none;
-				margin: 0;
-				padding: 0;
+			.cat-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1.2em;
 			}
-			li {
-				padding: 1.4em 0.4em;
-				border-bottom: 1px solid var(--line-strong);
-			}
-			li:first-child {
-				border-top: 1px solid var(--line-strong);
-			}
-			li a {
+			.cat-card {
 				display: block;
+				background: var(--ivory);
+				border: 1px solid var(--line-strong);
+				border-radius: 16px;
+				padding: 1.4em 1.5em;
+				box-shadow: var(--shadow-soft);
+				text-decoration: none;
+				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+			}
+			.cat-card:hover {
+				transform: translateY(-2px);
+				border-color: var(--terra);
 				text-decoration: none;
 			}
-			.title {
-				margin: 0 0 0.3em;
-				font-family: var(--font-serif);
-				font-size: 1.35rem;
-				font-weight: 500;
-				color: var(--ink);
-				transition: color 0.2s ease;
-			}
-			.date {
-				margin: 0;
-				font-size: 0.85rem;
-				color: var(--stone);
-				letter-spacing: 0.04em;
-			}
-			li a:hover .title {
+			.cat-card:hover h2 {
 				color: var(--terra);
 			}
-			li a:hover {
-				text-decoration: none;
+			.cat-card h2 {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin: 0 0 0.4em;
+				font-size: 1.3rem;
+				transition: color 0.2s ease;
+			}
+			.count {
+				font-family: var(--font-sans);
+				font-size: 0.85rem;
+				font-weight: 400;
+				color: var(--stone);
+			}
+			.cat-card p {
+				margin: 0;
+				color: var(--olive);
+				font-size: 0.92rem;
+				line-height: 1.7;
+			}
+			@media (max-width: 640px) {
+				.cat-grid {
+					grid-template-columns: 1fr;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section>
-				<div class="page-head">
-					<h1>博客</h1>
-					<p>笔记、整理，与一些想法。</p>
-				</div>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<div class="page-head">
+				<h1>博客</h1>
+				<p>按卡片类型分组。点进去看每一类。</p>
+			</div>
+			<div class="cat-grid">
+				{
+					CATEGORIES.map((cat) => (
+						<a class="cat-card" href={`/blog/${cat.subpath}/`}>
+							<h2>
+								{cat.name}
+								<span class="count">{countOf(cat.key)} 篇</span>
+							</h2>
+							<p>{cat.description}</p>
+						</a>
+					))
+				}
+			</div>
 		</main>
 		<Footer />
 	</body>

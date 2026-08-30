@@ -2,6 +2,7 @@
 title: '开站：为什么要写博客'
 description: '这个网站是干什么的，会放些什么东西。'
 pubDate: '2026-08-30'
+category: 'essays'
 ---
 
 这个站点搭好了。它是三件事的组合：

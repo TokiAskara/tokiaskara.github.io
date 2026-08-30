@@ -1,0 +1,117 @@
+---
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../../../content.config';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import Header from '../../../components/Header.astro';
+import { SITE_TITLE } from '../../../consts';
+
+export function getStaticPaths() {
+	return CATEGORIES.map((cat) => ({ params: { subpath: cat.subpath }, props: { cat } }));
+}
+
+const { cat } = Astro.props;
+const posts = (await getCollection('blog'))
+	.filter((p) => p.data.category === cat.key)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${cat.name} - ${SITE_TITLE}`} description={cat.description} />
+		<style>
+			.page-head {
+				margin: 1.5em 0 2em;
+			}
+			.page-head .crumbs {
+				margin: 0 0 0.6em;
+				font-size: 0.85rem;
+			}
+			.page-head .crumbs a {
+				color: var(--stone);
+			}
+			.page-head .crumbs a:hover {
+				color: var(--terra);
+			}
+			.page-head h1 {
+				margin: 0 0 0.3em;
+			}
+			.page-head p {
+				margin: 0;
+				color: var(--stone);
+				font-size: 0.95rem;
+			}
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			li {
+				padding: 1.4em 0.4em;
+				border-bottom: 1px solid var(--line-strong);
+			}
+			li:first-child {
+				border-top: 1px solid var(--line-strong);
+			}
+			li a {
+				display: block;
+				text-decoration: none;
+			}
+			.title {
+				margin: 0 0 0.3em;
+				font-family: var(--font-serif);
+				font-size: 1.35rem;
+				font-weight: 500;
+				color: var(--ink);
+				transition: color 0.2s ease;
+			}
+			.date {
+				margin: 0;
+				font-size: 0.85rem;
+				color: var(--stone);
+				letter-spacing: 0.04em;
+			}
+			li a:hover .title {
+				color: var(--terra);
+			}
+			li a:hover {
+				text-decoration: none;
+			}
+			.empty {
+				color: var(--stone);
+				padding: 2em 0;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-head">
+				<p class="crumbs"><a href="/blog/">博客</a> / {cat.name}</p>
+				<h1>{cat.name}</h1>
+				<p>{cat.description}</p>
+			</div>
+			<ul>
+				{
+					posts.length === 0 ? (
+						<p class="empty">这一类还没有文章。</p>
+					) : (
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<h4 class="title">{post.data.title}</h4>
+									<p class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					)
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
