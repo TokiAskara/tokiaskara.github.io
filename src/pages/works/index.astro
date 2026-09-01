@@ -1,0 +1,102 @@
+---
+import { WORKS } from '../../data/works';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`作品 - ${SITE_TITLE}`} description="日常练习与成品：渲染、建模、游戏片段。" />
+		<style>
+			.page-head {
+				margin: 1.5em 0 2em;
+			}
+			.page-head h1 {
+				margin: 0 0 0.3em;
+			}
+			.page-head p {
+				margin: 0;
+				color: var(--stone);
+				font-size: 0.95rem;
+			}
+			.work-list {
+				display: flex;
+				flex-direction: column;
+				gap: 2em;
+			}
+			.work-card {
+				background: var(--ivory);
+				border: 1px solid var(--line-strong);
+				border-radius: 16px;
+				padding: 1.4em 1.5em;
+				box-shadow: var(--shadow-soft);
+			}
+			.work-card h2 {
+				margin: 0 0 0.2em;
+				font-size: 1.35rem;
+			}
+			.meta {
+				margin: 0 0 0.8em;
+				font-size: 0.85rem;
+				color: var(--stone);
+				display: flex;
+				gap: 0.8em;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+			.tag {
+				background: rgba(201, 100, 66, 0.1);
+				color: var(--terra);
+				border-radius: 999px;
+				padding: 0.1em 0.7em;
+				font-size: 0.78rem;
+			}
+			.desc {
+				margin: 0 0 1em;
+				color: var(--olive);
+				font-size: 0.95rem;
+				line-height: 1.75;
+			}
+			video,
+			img.work-media {
+				display: block;
+				width: 100%;
+				border-radius: 12px;
+				border: 1px solid var(--line-strong);
+				background: #000;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-head">
+				<h1>作品</h1>
+				<p>日常练习与成品。渲染、建模、游戏，做成什么就放什么。</p>
+			</div>
+
+			<div class="work-list">
+				{
+					WORKS.map((w) => (
+						<article class="work-card">
+							<h2>{w.title}</h2>
+							<p class="meta">
+								<span>{w.date}</span>
+								{w.tags?.map((t) => <span class="tag">{t}</span>)}
+							</p>
+							<p class="desc">{w.description}</p>
+							{w.type === 'video' && (
+								<video controls preload="metadata" src={w.media} poster={w.poster} />
+							)}
+							{w.type === 'image' && <img class="work-media" src={w.media} alt={w.title} loading="lazy" />}
+						</article>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
