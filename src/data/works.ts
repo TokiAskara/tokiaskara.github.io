@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-phong-lighting',
+		title: 'OpenGL Phong 光照模型',
+		date: '2026-09-03',
+		type: 'video',
+		description:
+			'GLFW + OpenGL 学习项目里的完整 Phong 光照模型练习。在平行光基础上补齐环境光与高光（镜面反射）两块，ambient + diffuse + specular 三分量合成的完整光照效果。',
+		media: '/media/opengl-phong-lighting.mp4',
+		tags: ['OpenGL', 'GLSL', '光照', 'Phong'],
+	},
+	{
 		slug: 'opengl-outline-pass',
 		title: 'OpenGL 轮廓光实现',
 		date: '2026-09-03',
