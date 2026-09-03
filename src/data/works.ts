@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-outline-pass',
+		title: 'OpenGL 轮廓光实现',
+		date: '2026-09-03',
+		type: 'video',
+		description:
+			'GLFW + OpenGL 学习项目里的轮廓光（Outline / Stencil）练习。通过模板测试（Stencil Buffer）把模型轮廓描出来，观察描边宽度与视角变化时的表现。',
+		media: '/media/opengl-outline-pass.mp4',
+		tags: ['OpenGL', 'GLSL', '模板缓冲'],
+	},
+	{
 		slug: 'opengl-parallel-light',
 		title: 'OpenGL 平行光光栅化',
 		date: '2026-09-01',
