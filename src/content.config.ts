@@ -14,9 +14,9 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
-			// 内容分组：作品卡 / 主题卡 / 机制卡 / 随笔
+			// 内容分组：作品卡 / 主题卡 / 机制卡 / 关系卡 / 意象卡 / 随笔
 			category: z
-				.enum(['works', 'themes', 'mechanisms', 'essays'])
+				.enum(['works', 'themes', 'mechanisms', 'relationships', 'motifs', 'essays'])
 				.default('essays'),
 		}),
 });
@@ -42,6 +42,18 @@ export const CATEGORIES = [
 		name: '机制卡',
 		subpath: 'mechanisms',
 		description: '可以复用的叙事装置：结构步骤、作品中的证据、使用注意事项。',
+	},
+	{
+		key: 'relationships',
+		name: '关系卡',
+		subpath: 'relationships',
+		description: '一种人物关系意味着什么、能承载哪些冲突，以及写法步骤与范例。',
+	},
+	{
+		key: 'motifs',
+		name: '意象卡',
+		subpath: 'motifs',
+		description: '可复用的意象系统：核心功能、正反面用法与具体写法示范。',
 	},
 	{
 		key: 'essays',
