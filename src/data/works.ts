@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-texture-lighting',
+		title: 'OpenGL 纹理控制光照',
+		date: '2026-09-08',
+		type: 'video',
+		description:
+			'GLFW + OpenGL 学习项目里的纹理控制光照练习。将纹理采样结果与光照分量相乘，让材质颜色由贴图决定、明暗由光照决定，二者结合得到更真实的表面效果。',
+		media: '/media/opengl-texture-lighting.mp4',
+		tags: ['OpenGL', 'GLSL', '光照', '纹理'],
+	},
+	{
 		slug: 'opengl-phong-lighting',
 		title: 'OpenGL Phong 光照模型',
 		date: '2026-09-03',
