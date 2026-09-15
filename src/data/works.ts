@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-fresnel-water-reflection',
+		title: 'OpenGL 菲涅耳水面反射',
+		date: '2026-09-15',
+		type: 'video',
+		description:
+			'GLFW + OpenGL 学习项目里的菲涅耳（Fresnel）水面反射练习。利用菲涅耳方程让水面的反射强度随视角变化——正视时见水色、掠射时见反射，配合反射贴图与法线扰动做出接近真实的水面质感。',
+		media: '/media/opengl-fresnel-water-reflection.mp4',
+		tags: ['OpenGL', 'GLSL', '菲涅耳', '水面反射'],
+	},
+	{
 		slug: 'opengl-texture-lighting',
 		title: 'OpenGL 纹理控制光照',
 		date: '2026-09-08',
