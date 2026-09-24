@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-cubemap-skybox-reflection',
+		title: 'OpenGL 立方体贴图：天空盒与反射',
+		date: '2026-09-24',
+		type: 'video',
+		description:
+			'GLFW + OpenGL 学习项目里的立方体贴图（Cubemap）练习。用六张贴图拼出天空盒充当环境，再以视线方向的反射向量采样同一个立方体贴图，让物体表面映出周围环境。',
+		media: '/media/opengl-cubemap-skybox-reflection.mp4',
+		tags: ['OpenGL', 'GLSL', '立方体贴图', '天空盒', '环境反射'],
+	},
+	{
 		slug: 'opengl-fresnel-water-reflection',
 		title: 'OpenGL 菲涅耳水面反射',
 		date: '2026-09-15',
