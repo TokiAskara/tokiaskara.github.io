@@ -14,6 +14,16 @@ export interface Work {
 
 export const WORKS: Work[] = [
 	{
+		slug: 'opengl-coordinate-systems',
+		title: 'OpenGL 坐标系统',
+		date: '2026-10-13',
+		type: 'video',
+		description:
+			'跟着 LearnOpenGL 推进到坐标系统一章的成果。把模型空间、世界空间、观察空间、裁剪空间串成完整的 MVP 变换流水线，用矩阵组合完成平移、旋转、缩放与摄像机变换，同一个立方体在三维空间里正确呈现透视效果。',
+		media: '/media/opengl-coordinate-systems.mp4',
+		tags: ['OpenGL', 'GLSL', '坐标系统', 'MVP变换', 'LearnOpenGL'],
+	},
+	{
 		slug: 'opengl-cubemap-skybox-reflection',
 		title: 'OpenGL 立方体贴图：天空盒与反射',
 		date: '2026-09-24',
